@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProductService } from '../../services/product';
+import { CommonModule } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 
-import { CommonModule } from '@angular/common';
+import { ProductService }
+from '../../services/product';
 
 @Component({
   selector: 'app-products',
 
   standalone: true,
 
-  imports: [FormsModule, CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
 
   templateUrl: './products.html',
 
@@ -26,13 +30,21 @@ export class Products implements OnInit {
 
   category = '';
 
-  price = '';
+  price = 0;
 
-  quantity = '';
+  quantity = 0;
+
+  role = '';
 
   constructor(
     private productService: ProductService
-  ) {}
+  ) {
+
+    // GET USER ROLE
+    this.role =
+      localStorage.getItem('role') || '';
+
+  }
 
   ngOnInit(): void {
 

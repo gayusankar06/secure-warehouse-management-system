@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders
+} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +16,39 @@ export class TrackingService {
 
   constructor(private http: HttpClient) { }
 
-  // GET SHIPMENTS
-  getShipments() {
+  getHeaders() {
 
-    return this.http.get(this.apiUrl);
+    const token =
+      localStorage.getItem('token');
+
+    return {
+
+      headers: new HttpHeaders({
+
+        Authorization:
+          `Bearer ${token}`
+
+      })
+
+    };
 
   }
 
-  // ADD SHIPMENT
+  getShipments() {
+
+    return this.http.get(
+      this.apiUrl,
+      this.getHeaders()
+    );
+
+  }
+
   addShipment(shipment:any) {
 
     return this.http.post(
       this.apiUrl,
-      shipment
+      shipment,
+      this.getHeaders()
     );
 
   }

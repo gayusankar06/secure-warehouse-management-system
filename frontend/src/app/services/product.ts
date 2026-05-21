@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders
+} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +16,35 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  // CREATE HEADERS
+  getHeaders() {
+
+    const token =
+      localStorage.getItem('token');
+
+    return {
+
+      headers: new HttpHeaders({
+
+        Authorization:
+          `Bearer ${token}`
+
+      })
+
+    };
+
+  }
+
   // GET PRODUCTS
   getProducts() {
 
-    return this.http.get(this.apiUrl);
+    return this.http.get(
+
+      this.apiUrl,
+
+      this.getHeaders()
+
+    );
 
   }
 
@@ -24,8 +52,13 @@ export class ProductService {
   addProduct(product:any) {
 
     return this.http.post(
+
       this.apiUrl,
-      product
+
+      product,
+
+      this.getHeaders()
+
     );
 
   }

@@ -10,14 +10,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import com.warehouse.util.MaskingUtil;
+
 @Service
 public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
 
-    // SAVE PRODUCT
-    public Product saveProduct(Product product) {
+    public Product saveProduct(Product product){
+
+        // GENERATE MASKED CODE
+        product.setMaskedCode(
+
+                MaskingUtil.generateMaskedCode()
+
+        );
 
         return productRepository.save(product);
 

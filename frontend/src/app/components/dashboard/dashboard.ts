@@ -5,12 +5,17 @@ import {
   RouterLink
 } from '@angular/router';
 
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-dashboard',
 
   standalone: true,
 
-  imports: [RouterLink],
+  imports: [
+    RouterLink,
+    CommonModule
+  ],
 
   templateUrl: './dashboard.html',
 
@@ -19,16 +24,29 @@ import {
 
 export class Dashboard {
 
+  role = '';
+
   constructor(
     private router: Router
-  ) {}
+  ) {
+
+    // GET ROLE FROM LOCAL STORAGE
+    this.role =
+      localStorage.getItem('role') || '';
+
+  }
 
   logout() {
 
-    localStorage.removeItem('user');
+    // REMOVE TOKEN
+    localStorage.removeItem('token');
+
+    // REMOVE ROLE
+    localStorage.removeItem('role');
 
     alert('Logged Out');
 
+    // REDIRECT LOGIN
     this.router.navigate(['/']);
 
   }

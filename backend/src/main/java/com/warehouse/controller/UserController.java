@@ -1,9 +1,20 @@
 package com.warehouse.controller;
 
+import com.warehouse.dto.LoginRequest;
+
 import com.warehouse.entity.User;
+
+import com.warehouse.repository.UserRepository;
+
+import com.warehouse.security.JwtUtil;
+
 import com.warehouse.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.crypto.bcrypt
+        .BCryptPasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,23 +25,49 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // REGISTER API
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    private BCryptPasswordEncoder encoder =
+            new BCryptPasswordEncoder();
+
+    // REGISTER
     @PostMapping("/register")
-    public User registerUser(@RequestBody User user) {
+    public User registerUser(
+            @RequestBody User user) {
 
         return userService.registerUser(user);
 
     }
 
-    // LOGIN API
+    // LOGIN
     @PostMapping("/login")
-    public User loginUser(@RequestBody User user) {
+    public String login(
+            @RequestBody LoginRequest request) {
 
-        return userService.loginUser(
-                user.getEmail(),
-                user.getPassword()
-        );
+        User user =
 
+                userRepository
+                        .findByEmail(
+                                request.getEmail()
+                        );
+
+        if(user != null &&
+                encoder.matches(
+                        request.getPassword(),
+                        user.getPassword()
+                )) {
+
+            return jwtUtil.generateToken(
+                    user.getEmail(),
+                    user.getRole()
+            );
+
+        }
+
+        return "Invalid Login";
     }
-
 }

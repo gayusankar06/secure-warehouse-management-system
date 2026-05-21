@@ -32,6 +32,18 @@ export class Login {
 
   ) {}
 
+  // DECODE JWT TOKEN
+  decodeToken(token:string) {
+
+    return JSON.parse(
+
+      atob(token.split('.')[1])
+
+    );
+
+  }
+
+  // LOGIN FUNCTION
   login() {
 
     const user = {
@@ -42,27 +54,53 @@ export class Login {
 
     };
 
-    this.authService.login(user)
-      .subscribe((response:any) => {
+    this.authService
 
-        if(response) {
+      .login(user)
 
-          // STORE USER
+      .subscribe({
 
+        next: (response:any) => {
+
+          // STORE JWT TOKEN
           localStorage.setItem(
-            'user',
-            JSON.stringify(response)
+
+            'token',
+
+            response
+
+          );
+
+          // DECODE TOKEN
+          const decoded =
+
+            this.decodeToken(response);
+
+          // STORE ROLE
+          localStorage.setItem(
+
+            'role',
+
+            decoded.role
+
           );
 
           alert('Login Successful');
 
           // NAVIGATE DASHBOARD
+          this.router.navigate(
 
-          this.router.navigate(['/dashboard']);
+            ['/dashboard']
 
-        } else {
+          );
 
-          alert('Invalid Credentials');
+        },
+
+        error: (error) => {
+
+          alert('Invalid Login');
+
+          console.error(error);
 
         }
 

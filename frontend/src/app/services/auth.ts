@@ -16,8 +16,15 @@ export class AuthService {
   login(user:any) {
 
     return this.http.post(
+
       `${this.apiUrl}/login`,
-      user
+
+      user,
+
+      {
+        responseType: 'text'
+      }
+
     );
 
   }

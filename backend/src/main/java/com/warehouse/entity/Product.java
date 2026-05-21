@@ -21,4 +21,6 @@ public class Product {
 
     private Integer quantity;
 
+    private String maskedCode;
+
 }

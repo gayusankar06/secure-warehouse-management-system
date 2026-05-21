@@ -1,97 +1,119 @@
 <div class="container mt-5">
 
   <h1 class="mb-4 text-center">
-    Admin Dashboard
+
+    Secure Warehouse Dashboard
+
   </h1>
 
-  <div class="row">
+  <!-- ROLE DISPLAY -->
 
-    <div class="col-md-3">
+  <div class="alert alert-info">
 
-      <div class="card text-center p-4 bg-primary text-white">
+    Logged in as:
 
-        <h3>Products</h3>
+    <strong>{{ role }}</strong>
 
-        <h2>100</h2>
+  </div>
 
-      </div>
+  <!-- ADMIN CONTROLS -->
 
-    </div>
+  <div *ngIf="role === 'ADMIN'">
 
-    <div class="col-md-3">
+    <div class="card p-4 mb-4 border-danger">
 
-      <div class="card text-center p-4 bg-success text-white">
+      <h2 class="text-danger">
 
-        <h3>Orders</h3>
+        Admin Controls
 
-        <h2>50</h2>
+      </h2>
 
-      </div>
+      <p>
 
-    </div>
+        Full system access enabled.
 
-    <div class="col-md-3">
-
-      <div class="card text-center p-4 bg-warning text-dark">
-
-        <h3>Warehouses</h3>
-
-        <h2>10</h2>
-
-      </div>
-
-    </div>
-
-    <div class="col-md-3">
-
-      <div class="card text-center p-4 bg-dark text-white">
-
-        <h3>Shipments</h3>
-
-        <h2>25</h2>
-
-      </div>
+      </p>
 
     </div>
 
   </div>
 
-  <div class="mt-5">
+  <!-- MENU BUTTONS -->
+
+  <div class="d-flex flex-wrap gap-3">
+
+    <!-- PRODUCTS -->
 
     <a
+
+      *ngIf="
+        role === 'ADMIN' ||
+        role === 'SELLER'
+      "
+
       routerLink="/products"
-      class="btn btn-primary me-3">
+
+      class="btn btn-primary btn-lg">
 
       Products
 
     </a>
 
-    <a
-      routerLink="/warehouse"
-      class="btn btn-warning me-3">
-
-      Warehouses
-
-    </a>
+    <!-- ORDERS -->
 
     <a
+
+      *ngIf="
+        role === 'ADMIN' ||
+        role === 'BUYER'
+      "
+
       routerLink="/orders"
-      class="btn btn-info me-3">
+
+      class="btn btn-info btn-lg">
 
       Orders
 
     </a>
 
-    <a
-      routerLink="/tracking"
-      class="btn btn-dark me-3">
+    <!-- WAREHOUSE -->
 
-      Tracking
+    <a
+
+      *ngIf="
+        role === 'ADMIN'
+      "
+
+      routerLink="/warehouse"
+
+      class="btn btn-warning btn-lg">
+
+      Warehouse
 
     </a>
 
+    <!-- TRACKING -->
+
+    <a
+
+      *ngIf="
+        role === 'ADMIN'
+      "
+
+      routerLink="/tracking"
+
+      class="btn btn-dark btn-lg">
+
+      Shipment Tracking
+
+    </a>
+
+    <!-- LOGOUT -->
+
     <button
-      class="btn btn-danger"
+
+      class="btn btn-danger btn-lg"
+
       (click)="logout()">
 
       Logout

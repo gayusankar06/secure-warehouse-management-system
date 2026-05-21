@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders
+} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +16,39 @@ export class WarehouseService {
 
   constructor(private http: HttpClient) { }
 
-  // GET WAREHOUSES
-  getWarehouses() {
+  getHeaders() {
 
-    return this.http.get(this.apiUrl);
+    const token =
+      localStorage.getItem('token');
+
+    return {
+
+      headers: new HttpHeaders({
+
+        Authorization:
+          `Bearer ${token}`
+
+      })
+
+    };
 
   }
 
-  // ADD WAREHOUSE
+  getWarehouses() {
+
+    return this.http.get(
+      this.apiUrl,
+      this.getHeaders()
+    );
+
+  }
+
   addWarehouse(warehouse:any) {
 
     return this.http.post(
       this.apiUrl,
-      warehouse
+      warehouse,
+      this.getHeaders()
     );
 
   }
