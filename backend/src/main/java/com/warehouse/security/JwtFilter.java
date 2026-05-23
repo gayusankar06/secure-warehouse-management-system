@@ -56,7 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = null;
 
-        String email = null;
+        String username = null;
 
         // CHECK BEARER TOKEN
         if(authHeader != null &&
@@ -65,13 +65,13 @@ public class JwtFilter extends OncePerRequestFilter {
             token =
                     authHeader.substring(7);
 
-            email =
+            username =
                     jwtUtil.extractUsername(token);
 
         }
 
         // AUTHENTICATE USER
-        if(email != null &&
+        if(username != null &&
                 SecurityContextHolder
                         .getContext()
                         .getAuthentication() == null) {
@@ -80,7 +80,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                     User.builder()
 
-                            .username(email)
+                            .username(username)
 
                             .password("")
 

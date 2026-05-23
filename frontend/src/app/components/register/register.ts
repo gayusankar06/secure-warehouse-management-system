@@ -18,8 +18,7 @@ import { AuthService } from '../../services/auth';
 })
 export class Register {
 
-  name = '';
-  email = '';
+  username = '';
   password = '';
   role = 'BUYER';
 
@@ -30,8 +29,7 @@ export class Register {
 
   register() {
     const user = {
-      name: this.name,
-      email: this.email,
+      username: this.username,
       password: this.password,
       role: this.role
     };

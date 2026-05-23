@@ -1,37 +1,59 @@
 package com.warehouse.dto;
 
 import com.warehouse.entity.Product;
+import lombok.Data;
 
+@Data
 public class ProductResponse {
 
     private Long id;
-    private String name;
-    private String maskedCode;
+    private String productName;
     private String category;
-    private Double price;
+    
+    private Double sellingPrice;
+    private Double supplierPrice;
+    
+    private String maskedPrice; 
+    
     private Integer quantity;
-    private String displayQuantity;
     private String stockStatus;
+    
+    private String maskedCode;
+    private Boolean secureFlag;
 
     public ProductResponse() {
     }
 
     public static ProductResponse from(Product product, String role) {
         ProductResponse response = new ProductResponse();
-        response.id = product.getId();
-        response.maskedCode = product.getMaskedCode();
-        response.category = product.getCategory();
-        response.price = product.getPrice();
-        response.stockStatus = getStockStatus(product.getQuantity());
+        response.setId(product.getId());
+        response.setProductName(product.getProductName());
+        response.setCategory(product.getCategory());
+        response.setStockStatus(getStockStatus(product.getQuantity()));
 
         if ("ADMIN".equals(role)) {
-            response.name = product.getName();
-            response.quantity = product.getQuantity();
-            response.displayQuantity = product.getQuantity() != null ? product.getQuantity().toString() : "0";
-        } else {
-            response.name = null;
-            response.quantity = null;
-            response.displayQuantity = "SECURE";
+            response.setSellingPrice(product.getSellingPrice());
+            response.setSupplierPrice(product.getSupplierPrice());
+            response.setQuantity(product.getQuantity());
+            response.setMaskedCode(product.getMaskedCode());
+            response.setSecureFlag(product.getSecureFlag());
+            response.setMaskedPrice("₹ " + product.getSellingPrice());
+        } else if ("SELLER".equals(role)) {
+            response.setSellingPrice(product.getSellingPrice());
+            // SELLER cannot see supplier price and secure flag
+            response.setSupplierPrice(null);
+            response.setSecureFlag(null);
+            response.setQuantity(product.getQuantity());
+            response.setMaskedCode(product.getMaskedCode());
+            response.setMaskedPrice("₹ " + product.getSellingPrice());
+        } else { // BUYER
+            // BUYER can only see masked price and public product details
+            response.setSellingPrice(null);
+            response.setSupplierPrice(null);
+            response.setQuantity(null);
+            response.setMaskedCode(null);
+            response.setSecureFlag(null);
+            response.setMaskedPrice("₹ *****");
         }
 
         return response;
@@ -41,39 +63,9 @@ public class ProductResponse {
         if (quantity == null) {
             return "Unknown";
         }
-        return quantity > 10 ? "In Stock" : "Low Stock";
+        if (quantity > 50) return "In Stock";
+        if (quantity >= 10) return "Limited";
+        if (quantity > 0) return "Low Stock";
+        return "Out of Stock";
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getMaskedCode() {
-        return maskedCode;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public String getDisplayQuantity() {
-        return displayQuantity;
-    }
-
-    public String getStockStatus() {
-        return stockStatus;
-    }
-
 }

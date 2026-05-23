@@ -70,7 +70,8 @@ public class SecurityConfig {
 
                         // ADMIN + BUYER
                         .requestMatchers(
-                                "/api/orders/**"
+                                "/api/orders/**",
+                                "/api/tracking/**"
                         )
 
                         .hasAnyRole(

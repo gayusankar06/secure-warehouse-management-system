@@ -1,205 +1,121 @@
 <app-sidebar></app-sidebar>
 
-<div class="orders-container">
+<div class="orders-container" style="padding: 20px; margin-left: 250px;">
 
   <!-- PAGE HEADER -->
-
-  <div class="d-flex justify-content-between mb-4">
-
+  <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
     <div>
-
-      <h1>Orders Management</h1>
-
-      <p class="text-muted">
-
-        Buyer Orders & Delivery Monitoring
-
-      </p>
-
+      <h1 style="font-weight: 600;">Orders Management</h1>
+      <p style="color: var(--text-secondary);">Buyer Orders & Delivery Monitoring</p>
     </div>
-
     <div>
-
-      <span class="badge bg-dark p-2">
-
-        {{ role }}
-
+      <span class="badge" style="background: var(--info); color: white; padding: 8px 16px;">
+        {{ role }} ACCESS
       </span>
-
     </div>
-
   </div>
 
-  <!-- ANALYTICS -->
-
-  <div class="row mb-4">
-
-    <!-- TOTAL ORDERS -->
-
-    <div class="col-md-4">
-
-      <div class="card analytics-card blue-card">
-
-        <h2>120</h2>
-
-        <p>Total Orders</p>
-
-      </div>
-
+  <!-- DASHBOARD CARDS -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px;">
+    <div class="glass-card text-center">
+      <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Total Orders</h4>
+      <h2>{{ totalOrders }}</h2>
     </div>
-
-    <!-- PENDING -->
-
-    <div class="col-md-4">
-
-      <div class="card analytics-card yellow-card">
-
-        <h2>35</h2>
-
-        <p>Pending Orders</p>
-
-      </div>
-
+    <div class="glass-card text-center">
+      <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Pending Deliveries</h4>
+      <h2 style="color: var(--warning);">{{ pendingDeliveries }}</h2>
     </div>
-
-    <!-- DELIVERED -->
-
-    <div class="col-md-4">
-
-      <div class="card analytics-card green-card">
-
-        <h2>85</h2>
-
-        <p>Delivered Orders</p>
-
-      </div>
-
+    <div class="glass-card text-center">
+      <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Delivered Orders</h4>
+      <h2 style="color: var(--success);">{{ deliveredOrders }}</h2>
     </div>
-
+    <div class="glass-card text-center">
+      <h4 style="color: var(--text-secondary); margin-bottom: 8px;">Cancelled Orders</h4>
+      <h2 style="color: var(--danger);">{{ cancelledOrders }}</h2>
+    </div>
   </div>
 
-  <!-- ADD ORDER -->
-
-  <div class="card p-4 mb-4">
-
-    <h3>Create Order</h3>
-
-    <div class="row">
-
-      <div class="col-md-4">
-
-        <input
-
-          class="form-control"
-
-          placeholder="Product"
-
-          [(ngModel)]="product">
-
-      </div>
-
-      <div class="col-md-4">
-
-        <input
-
-          class="form-control"
-
-          placeholder="Customer"
-
-          [(ngModel)]="customer">
-
-      </div>
-
-      <div class="col-md-4">
-
-        <button
-
-          class="btn btn-success w-100"
-
-          (click)="addOrder()">
-
-          Create Order
-
-        </button>
-
-      </div>
-
+  <!-- CREATE ORDER FORM -->
+  <div class="glass-card mb-4" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 16px;">Create Order</h3>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px;">
+      <select class="form-control" [(ngModel)]="selectedProductId">
+        <option [ngValue]="null" disabled>Select Product</option>
+        <option *ngFor="let p of products" [ngValue]="p.id">{{p.productName}}</option>
+      </select>
+      <input type="number" class="form-control" placeholder="Quantity" [(ngModel)]="quantity">
+      <input class="form-control" placeholder="Delivery Address" [(ngModel)]="deliveryAddress">
+      <select class="form-control" [(ngModel)]="paymentMethod">
+        <option value="Credit Card">Credit Card</option>
+        <option value="PayPal">PayPal</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
     </div>
+    <button class="btn-primary" (click)="addOrder()">Place Order</button>
+  </div>
 
+  <!-- SEARCH & FILTER -->
+  <div class="glass-card mb-4" style="margin-bottom: 24px; display: flex; gap: 16px;">
+    <input class="form-control" placeholder="Search by Tracking ID or Order ID..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" style="flex: 2;">
+    <select class="form-control" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()" style="flex: 1;">
+      <option value="">All Statuses</option>
+      <option *ngFor="let status of uniqueStatuses" [value]="status">{{ status }}</option>
+    </select>
   </div>
 
   <!-- ORDERS TABLE -->
-
-  <div class="card p-4">
-
-    <h3 class="mb-4">
-
-      Orders Tracking Panel
-
-    </h3>
-
-    <table class="table table-hover table-bordered">
-
-      <thead class="table-dark">
-
-      <tr>
-
-        <th>ID</th>
-
-        <th>Product</th>
-
-        <th>Customer</th>
-
-        <th>Status</th>
-
-      </tr>
-
-      </thead>
-
-      <tbody>
-
-      <tr *ngFor="let order of orders">
-
-        <td>{{order.id}}</td>
-
-        <td>{{order.product}}</td>
-
-        <td>{{order.customer}}</td>
-
-        <td>
-
-          <span
-
-            *ngIf="
-              order.status === 'Delivered'
-            "
-
-            class="badge bg-success">
-
-            Delivered
-
-          </span>
-
-          <span
-
-            *ngIf="
-              order.status !== 'Delivered'
-            "
-
-            class="badge bg-warning text-dark">
-
-            Pending
-
-          </span>
-
-        </td>
-
-      </tr>
-
-      </tbody>
-
-    </table>
-
+  <div class="glass-card">
+    <h3 style="margin-bottom: 16px;">Orders Tracking Panel</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Masked Price</th>
+            <th>Delivery Status</th>
+            <th>Tracking ID</th>
+            <th>Order Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders">
+            <td>{{order.id}}</td>
+            <td>{{getProductName(order.productId)}}</td>
+            <td>{{order.quantity}}</td>
+            <td>{{getProductPrice(order.productId)}}</td>
+            <td>
+              <div style="margin-bottom: 8px;">
+                <span class="badge" 
+                  [ngClass]="{
+                    'badge-warning': order.orderStatus === 'Pending',
+                    'badge-info': order.orderStatus === 'Processing' || order.orderStatus === 'Shipped',
+                    'badge-success': order.orderStatus === 'Delivered',
+                    'badge-danger': order.orderStatus === 'Cancelled'
+                  }">
+                  {{ order.orderStatus || 'Pending' }}
+                </span>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; overflow: hidden; width: 100%;">
+                <div [style.width.%]="getProgress(order.orderStatus)" style="background: var(--info); height: 100%;"></div>
+              </div>
+            </td>
+            <td>{{order.trackingId || 'N/A'}}</td>
+            <td>{{order.createdAt | date:'shortDate'}}</td>
+            <td>
+              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                <button class="badge badge-info" style="border: none; cursor: pointer;" (click)="viewDetails(order)">Details</button>
+                <button class="badge badge-info" style="border: none; cursor: pointer;" (click)="trackOrder(order)">Track</button>
+                <button class="badge badge-warning" style="border: none; cursor: pointer;" (click)="downloadInvoice(order)">Invoice</button>
+                <button class="badge badge-danger" style="border: none; cursor: pointer;" (click)="cancelOrder(order)" *ngIf="order.orderStatus === 'Pending'">Cancel</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

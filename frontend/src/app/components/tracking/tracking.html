@@ -1,205 +1,75 @@
 <app-sidebar></app-sidebar>
 
-<div class="tracking-container">
-
+<div class="tracking-container" style="padding: 20px; margin-left: 250px;">
   <!-- PAGE HEADER -->
-
-  <div class="d-flex justify-content-between mb-4">
-
+  <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
     <div>
-
-      <h1>Shipment Tracking</h1>
-
-      <p class="text-muted">
-
-        Secure Logistics & Delivery Monitoring
-
-      </p>
-
+      <h1 style="font-weight: 600;">Shipment Tracking</h1>
+      <p style="color: var(--text-secondary);">Secure Logistics & Delivery Monitoring</p>
     </div>
-
     <div>
-
-      <span class="badge bg-dark p-2">
-
-        {{ role }}
-
+      <span class="badge" style="background: var(--accent-color); color: white; padding: 8px 16px;">
+        {{ role }} ACCESS
       </span>
-
     </div>
-
-  </div>
-
-  <!-- ANALYTICS -->
-
-  <div class="row mb-4">
-
-    <!-- TOTAL SHIPMENTS -->
-
-    <div class="col-md-4">
-
-      <div class="card analytics-card blue-card">
-
-        <h2>240</h2>
-
-        <p>Total Shipments</p>
-
-      </div>
-
-    </div>
-
-    <!-- IN TRANSIT -->
-
-    <div class="col-md-4">
-
-      <div class="card analytics-card yellow-card">
-
-        <h2>55</h2>
-
-        <p>In Transit</p>
-
-      </div>
-
-    </div>
-
-    <!-- DELIVERED -->
-
-    <div class="col-md-4">
-
-      <div class="card analytics-card green-card">
-
-        <h2>185</h2>
-
-        <p>Delivered</p>
-
-      </div>
-
-    </div>
-
   </div>
 
   <!-- ADD SHIPMENT -->
-
-  <div class="card p-4 mb-4">
-
-    <h3>Create Shipment</h3>
-
-    <div class="row">
-
-      <div class="col-md-4">
-
-        <input
-
-          class="form-control"
-
-          placeholder="Tracking Number"
-
-          [(ngModel)]="trackingNumber">
-
-      </div>
-
-      <div class="col-md-4">
-
-        <input
-
-          class="form-control"
-
-          placeholder="Destination"
-
-          [(ngModel)]="destination">
-
-      </div>
-
-      <div class="col-md-4">
-
-        <button
-
-          class="btn btn-success w-100"
-
-          (click)="addShipment()">
-
-          Create Shipment
-
-        </button>
-
-      </div>
-
+  <div class="glass-card mb-4" style="margin-bottom: 24px;">
+    <h3 style="margin-bottom: 16px;">Update Tracking</h3>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px;">
+      <input type="number" class="form-control" placeholder="Order ID" [(ngModel)]="orderId">
+      <input class="form-control" placeholder="Location" [(ngModel)]="location">
+      <select class="form-control" [(ngModel)]="status">
+        <option value="">Select Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Processing">Processing</option>
+        <option value="Packed">Packed</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
     </div>
-
+    <div style="display: flex; gap: 12px;">
+      <button class="btn-primary" (click)="addTracking()">Add Tracking Step</button>
+      <button class="btn-primary" style="background: var(--text-secondary);" (click)="loadTracking()">Load History</button>
+    </div>
   </div>
 
   <!-- SHIPMENT TABLE -->
-
-  <div class="card p-4">
-
-    <h3 class="mb-4">
-
-      Shipment Tracking Panel
-
-    </h3>
-
-    <table class="table table-hover table-bordered">
-
-      <thead class="table-dark">
-
-      <tr>
-
-        <th>ID</th>
-
-        <th>Tracking Number</th>
-
-        <th>Destination</th>
-
-        <th>Status</th>
-
-      </tr>
-
-      </thead>
-
-      <tbody>
-
-      <tr *ngFor="let shipment of shipments">
-
-        <td>{{shipment.id}}</td>
-
-        <td>{{shipment.trackingNumber}}</td>
-
-        <td>{{shipment.destination}}</td>
-
-        <td>
-
-          <span
-
-            *ngIf="
-              shipment.status === 'Delivered'
-            "
-
-            class="badge bg-success">
-
-            Delivered
-
-          </span>
-
-          <span
-
-            *ngIf="
-              shipment.status !== 'Delivered'
-            "
-
-            class="badge bg-warning text-dark">
-
-            In Transit
-
-          </span>
-
-        </td>
-
-      </tr>
-
-      </tbody>
-
-    </table>
-
+  <div class="glass-card">
+    <h3 style="margin-bottom: 16px;">Tracking History</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Order ID</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let shipment of shipments">
+            <td>{{shipment.id}}</td>
+            <td>{{shipment.orderId}}</td>
+            <td>{{shipment.location}}</td>
+            <td>
+              <span class="badge" 
+                [ngClass]="{
+                  'badge-success': shipment.status === 'Delivered',
+                  'badge-warning': shipment.status === 'Pending' || shipment.status === 'Processing',
+                  'badge-info': shipment.status === 'Packed' || shipment.status === 'Shipped',
+                  'badge-danger': shipment.status === 'Cancelled'
+                }">
+                {{ shipment.status }}
+              </span>
+            </td>
+            <td>{{shipment.timestamp | date:'medium'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
 </div>

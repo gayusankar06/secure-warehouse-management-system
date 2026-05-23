@@ -50,17 +50,16 @@ export class ProductService {
 
   // ADD PRODUCT
   addProduct(product:any) {
-
-    return this.http.post(
-
-      this.apiUrl,
-
-      product,
-
-      this.getHeaders()
-
-    );
-
+    return this.http.post(this.apiUrl, product, this.getHeaders());
   }
 
+  // UPDATE PRODUCT
+  updateProduct(id: number, product:any) {
+    return this.http.put(`${this.apiUrl}/${id}`, product, this.getHeaders());
+  }
+
+  // DELETE PRODUCT
+  deleteProduct(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`, this.getHeaders());
+  }
 }

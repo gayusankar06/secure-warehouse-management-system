@@ -12,26 +12,13 @@
 
       <div class="mb-3">
 
-        <label>Name</label>
+        <label>Username</label>
 
         <input
           type="text"
           class="form-control"
-          [(ngModel)]="name"
-          name="name"
-          required>
-
-      </div>
-
-      <div class="mb-3">
-
-        <label>Email</label>
-
-        <input
-          type="email"
-          class="form-control"
-          [(ngModel)]="email"
-          name="email"
+          [(ngModel)]="username"
+          name="username"
           required>
 
       </div>
@@ -60,6 +47,7 @@
 
           <option value="BUYER">BUYER</option>
           <option value="SELLER">SELLER</option>
+          <option value="ADMIN">ADMIN</option>
 
         </select>
 

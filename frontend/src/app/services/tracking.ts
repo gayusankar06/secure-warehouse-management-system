@@ -11,46 +11,24 @@ import {
 
 export class TrackingService {
 
-  private apiUrl =
-    'http://localhost:8081/api/shipments';
+  private apiUrl = 'http://localhost:8081/api/tracking';
 
   constructor(private http: HttpClient) { }
 
   getHeaders() {
-
-    const token =
-      localStorage.getItem('token');
-
+    const token = localStorage.getItem('token');
     return {
-
       headers: new HttpHeaders({
-
-        Authorization:
-          `Bearer ${token}`
-
+        Authorization: `Bearer ${token}`
       })
-
     };
-
   }
 
-  getShipments() {
-
-    return this.http.get(
-      this.apiUrl,
-      this.getHeaders()
-    );
-
+  getTrackingByOrder(orderId: number) {
+    return this.http.get(`${this.apiUrl}/${orderId}`, this.getHeaders());
   }
 
-  addShipment(shipment:any) {
-
-    return this.http.post(
-      this.apiUrl,
-      shipment,
-      this.getHeaders()
-    );
-
+  addTracking(tracking:any) {
+    return this.http.post(this.apiUrl, tracking, this.getHeaders());
   }
-
 }

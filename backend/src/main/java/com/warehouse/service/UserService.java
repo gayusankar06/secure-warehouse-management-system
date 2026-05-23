@@ -20,9 +20,9 @@ public class UserService {
     // REGISTER USER
     public User registerUser(User user) {
 
-        // CHECK EXISTING EMAIL
+        // CHECK EXISTING USERNAME
         User existingUser =
-                userRepository.findByEmail(user.getEmail());
+                userRepository.findByUsername(user.getUsername());
 
         if(existingUser != null) {
 
@@ -40,10 +40,10 @@ public class UserService {
     }
 
     // LOGIN USER
-    public User loginUser(String email, String password) {
+    public User loginUser(String username, String password) {
 
         User user =
-                userRepository.findByEmail(email);
+                userRepository.findByUsername(username);
 
         // VERIFY PASSWORD
         if(user != null &&

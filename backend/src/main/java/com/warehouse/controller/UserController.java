@@ -51,8 +51,8 @@ public class UserController {
         User user =
 
                 userRepository
-                        .findByEmail(
-                                request.getEmail()
+                        .findByUsername(
+                                request.getUsername()
                         );
 
         if(user != null &&
@@ -62,7 +62,7 @@ public class UserController {
                 )) {
 
             return jwtUtil.generateToken(
-                    user.getEmail(),
+                    user.getUsername(),
                     user.getRole()
             );
 

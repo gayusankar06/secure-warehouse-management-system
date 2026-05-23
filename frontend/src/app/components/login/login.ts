@@ -23,7 +23,7 @@ import { AuthService } from '../../services/auth';
 
 export class Login {
 
-  email = '';
+  username = '';
 
   password = '';
 
@@ -51,7 +51,7 @@ export class Login {
 
     const user = {
 
-      email: this.email,
+      username: this.username,
 
       password: this.password
 

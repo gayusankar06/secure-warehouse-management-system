@@ -1,6 +1,8 @@
 <div class="login-container">
 
-  <div class="login-card">
+  <div class="login-card glass-card">
+
+    <!-- TITLE -->
 
     <h1>Secure Warehouse System</h1>
 
@@ -8,7 +10,11 @@
       Secure Product Tracking Platform
     </p>
 
+    <!-- LOGIN FORM -->
+
     <form (ngSubmit)="login()">
+
+      <!-- EMAIL -->
 
       <div class="mb-3">
 
@@ -23,6 +29,8 @@
 
       </div>
 
+      <!-- PASSWORD -->
+
       <div class="mb-3">
 
         <label>Password</label>
@@ -36,6 +44,8 @@
 
       </div>
 
+      <!-- BUTTON -->
+
       <button class="btn btn-dark w-100">
 
         Secure Login
@@ -44,26 +54,42 @@
 
     </form>
 
-    <div class="text-center mt-3">
-      <a routerLink="/register" class="link-primary">
+    <!-- REGISTER LINK -->
+
+    <div class="register-link">
+
+      <a
+        routerLink="/register"
+        class="link-primary">
+
         Create a new account
+
       </a>
+
     </div>
 
-    <div class="roles-section mt-4">
+    <!-- ROLES -->
+
+    <div class="roles-section">
 
       <h5>System Roles</h5>
 
       <div class="role-card admin">
+
         ADMIN → Full Access
+
       </div>
 
       <div class="role-card seller">
+
         SELLER → Product Management
+
       </div>
 
       <div class="role-card buyer">
+
         BUYER → Orders & Tracking
+
       </div>
 
     </div>

@@ -27,7 +27,7 @@ public class JwtUtil {
 
     // GENERATE TOKEN
     public String generateToken(
-            String email,
+            String username,
             String role
     ) {
 
@@ -40,7 +40,7 @@ public class JwtUtil {
 
                 .setClaims(claims)
 
-                .setSubject(email)
+                .setSubject(username)
 
                 .setIssuedAt(
                         new Date()
